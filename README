@@ -1,3 +1,7 @@
+This is to add scope to tags. As in, you can tag your friends with things like 'work friends' or 'people to not reply to' and they don't show up in a tag cloud or whatever. it'll work something like this:
+  
+  joe.tag_list.add 'school friends', :scope=> 'buddy_list'
+
 = acts_as_taggable_on_steroids
 
 If you find this plugin useful, please consider a donation to show your support!

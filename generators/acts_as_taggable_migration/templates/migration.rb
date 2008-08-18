@@ -2,6 +2,9 @@ class ActsAsTaggableMigration < ActiveRecord::Migration
   def self.up
     create_table :tags do |t|
       t.column :name, :string
+      
+      # adding a type column for STI
+      t.string :type
     end
     
     create_table :taggings do |t|
@@ -11,6 +14,10 @@ class ActsAsTaggableMigration < ActiveRecord::Migration
       # You should make sure that the column created is
       # long enough to store the required class names.
       t.column :taggable_type, :string
+      
+      # adding scope for my own devices. 
+      t.string :scope
+      t.integer :creator_id
       
       t.column :created_at, :datetime
     end

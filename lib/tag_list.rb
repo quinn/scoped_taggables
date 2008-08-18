@@ -1,5 +1,11 @@
 class TagList < Array
   cattr_accessor :delimiter
+  attr_writer :scope
+  
+  def scope
+    @scope||= TAG_SCOPES.first
+  end
+  
   self.delimiter = ','
   
   def initialize(*args)
@@ -62,7 +68,8 @@ class TagList < Array
   
   def extract_and_apply_options!(args)
     options = args.last.is_a?(Hash) ? args.pop : {}
-    options.assert_valid_keys :parse
+    options.assert_valid_keys :parse, :scope
+    self.scope= options[:scope] if options[:scope]
     
     if options[:parse]
       args.map! { |a| self.class.from(a) }

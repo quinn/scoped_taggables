@@ -1,3 +1,8 @@
+# for som reason putting this in tags_helper_test.rb didn't work
+# i thought the helper file was loading this one, oh well
+ENV['DB']= 'sqlite3'
+TAG_SCOPES= %w{endoplasm ectoplasm exoplasm}
+
 require 'test/unit'
 
 begin
