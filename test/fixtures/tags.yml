@@ -17,3 +17,13 @@ question:
 animal:
   id: 5
   name: Crazy animal
+  
+# endo?
+coworkers:
+  id: 6
+  name: coworkers
+
+family:
+  id: 7
+  name: family
+

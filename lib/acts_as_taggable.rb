@@ -107,14 +107,21 @@ module ActiveRecord #:nodoc:
         end
         
         def find_options_for_tag_counts(options = {})
-          options.assert_valid_keys :start_at, :end_at, :conditions, :at_least, :at_most, :order, :limit
+          options.assert_valid_keys :start_at, :end_at, :conditions, :at_least, :at_most, :order, :limit, :scope
           options = options.dup
           
           scope = scope(:find)
           start_at = sanitize_sql(["#{Tagging.table_name}.created_at >= ?", options.delete(:start_at)]) if options[:start_at]
           end_at = sanitize_sql(["#{Tagging.table_name}.created_at <= ?", options.delete(:end_at)]) if options[:end_at]
           
+          scope_statement = if options[:scope] 
+            "#{Tagging.table_name}.scope = #{quote_value(options[:scope])}"
+          else
+            "#{Tagging.table_name}.scope = #{quote_value(TAG_SCOPES.last)}"
+          end
+          
           conditions = [
+            scope_statement,
             "#{Tagging.table_name}.taggable_type = #{quote_value(base_class.name)}",
             sanitize_sql(options.delete(:conditions)),
             scope && scope[:conditions],
@@ -155,13 +162,16 @@ module ActiveRecord #:nodoc:
       end
       
       module InstanceMethods
-        def tag_list
+        def tag_list options={:scope=> TAG_SCOPES.last}
           return @tag_list if @tag_list
           
           if self.class.caching_tag_list? and !(cached_value = send(self.class.cached_tag_list_column_name)).nil?
             @tag_list = TagList.from(cached_value)
           else
-            @tag_list = TagList.new(*tags.map(&:name))
+            taggings.find(:all, :conditions => {:scope=> options[:scope]})
+            @tag_list = TagList.new(*taggings.map{|t| t.tag.name})
+            @tag_list.scope= options[:scope]
+            @tag_list
           end
         end
         

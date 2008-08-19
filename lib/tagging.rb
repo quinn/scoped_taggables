@@ -12,7 +12,6 @@ class Tagging < ActiveRecord::Base #:nodoc:
   end
   
   def after_destroy
-    puts Tag.destroy_unused
     if Tag.destroy_unused
       if tag.taggings.count.zero?
         tag.destroy
