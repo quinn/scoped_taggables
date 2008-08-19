@@ -6,9 +6,9 @@ class Tagging < ActiveRecord::Base #:nodoc:
     :foreign_key => :creator_id
   validates_inclusion_of :scope, :in=> TAG_SCOPES
   
-  # scope defaults to most inner most scope
+  # scope defaults to most outer most scope
   def scope
-    @scope ||= TAG_SCOPES.first
+    @scope ||= TAG_SCOPES.last
   end
   
   def after_destroy

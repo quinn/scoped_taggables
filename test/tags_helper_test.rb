@@ -8,7 +8,6 @@ class TagsHelperTest < Test::Unit::TestCase
   def test_tag_cloud
     cloud_elements = []
     
-    #require 'ruby-debug' ; debugger
     tag_cloud Post.tag_counts, %w(css1 css2 css3 css4) do |tag, css_class|
       cloud_elements << [tag, css_class]
     end

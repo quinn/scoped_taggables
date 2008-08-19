@@ -163,13 +163,16 @@ module ActiveRecord #:nodoc:
       
       module InstanceMethods
         def tag_list options={:scope=> TAG_SCOPES.last}
-          return @tag_list if @tag_list
+          return @tag_list if @tag_list and @tag_list.scope == options[:scope]
           
           if self.class.caching_tag_list? and !(cached_value = send(self.class.cached_tag_list_column_name)).nil?
             @tag_list = TagList.from(cached_value)
           else
-            taggings.find(:all, :conditions => {:scope=> options[:scope]})
-            @tag_list = TagList.new(*taggings.map{|t| t.tag.name})
+            scoped_taggings= taggings.find(:all, 
+              :conditions => {:scope=> options[:scope]},
+              :include=> :tag )
+            
+            @tag_list = TagList.new(*scoped_taggings.map{|t| t.tag.name})
             @tag_list.scope= options[:scope]
             @tag_list
           end

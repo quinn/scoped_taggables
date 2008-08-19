@@ -3,7 +3,7 @@ class TagList < Array
   attr_writer :scope
   
   def scope
-    @scope||= TAG_SCOPES.first
+    @scope||= TAG_SCOPES.last
   end
   
   self.delimiter = ','
