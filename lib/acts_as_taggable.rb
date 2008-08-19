@@ -188,7 +188,11 @@ module ActiveRecord #:nodoc:
             end
             
             new_tag_names.each do |new_tag_name|
-              taggings << Tagging.create(:tag=> Tag.find_or_create_with_like_by_name(new_tag_name), :scope=> @tag_list.scope)
+              #tags << Tag.find_or_create_with_like_by_name(new_tag_name)
+              tagged= taggings.build( 
+                :scope=> @tag_list.scope, 
+                :tag=> Tag.find_or_create_with_like_by_name(new_tag_name) )
+              tagged.save!                       
             end
           end
           

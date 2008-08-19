@@ -324,12 +324,14 @@ class ActsAsTaggableOnSteroidsTest < Test::Unit::TestCase
     
     posts(:jonathan_sky).tag_list.add("Random")
     posts(:jonathan_sky).save!
-    
     assert_difference 'Tag.count', -1 do
+      require 'ruby-debug' ; debugger
       posts(:jonathan_sky).tag_list.remove("Random")
       posts(:jonathan_sky).save!
     end
-  ensure
+    
+    # require 'ruby-debug' ; debugger
+    # ensure
     Tag.destroy_unused = false
   end
 end
